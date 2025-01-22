@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const register= async(req, res)=>{
     try {
-        const {name, email, password}= req.body;
+        const {name, email, password, role}= req.body;
         
         if(!name || !email || !password){
             return res.status(400).json({message: 'All fields are required'});
@@ -21,7 +21,8 @@ const register= async(req, res)=>{
         const newUser= new User({
             name, 
             email,
-            password: hashedPassword
+            password: hashedPassword, 
+            role: role || 'User'
         });
 
         await newUser.save();
@@ -50,7 +51,7 @@ const login= async(req, res)=>{
             return res.status(401).json({message: 'Invalid credentials'});
         }
 
-        const token= jwt.sign({id: userExist._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+        const token= jwt.sign({id: userExist._id, role: userExist.role}, process.env.JWT_SECRET, {expiresIn: '1h'});
 
         res.status(200).json({message: 'User logged in successfully', token});
         
