@@ -106,6 +106,38 @@ const uploadProfilePhoto = async (req, res) => {
     }
 };
 
+const updateProfileVisibility = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const { visibility } = req.body;
+
+        if (typeof visibility !== 'boolean') {
+            return res.status(400).json({ message: 'Invalid visibility value. Must be true or false.' });
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { visibility } },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({
+            message: 'Profile visibility updated successfully.',
+            user: updatedUser,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'An error occurred.', error: error.message });
+    }
+};
 
 
-module.exports= { fetchProfile, updateProfile, uploadProfilePhoto };
+module.exports= { fetchProfile, updateProfile, uploadProfilePhoto, updateProfileVisibility };
