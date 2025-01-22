@@ -171,5 +171,24 @@ const listPublicProfiles = async (req, res) => {
     }
 };
 
+const deleteUser= async(req, res)=>{
+    try {
+        const userId= req.user.id;
+        if(!userId){
+            res.status(401).json({message: 'Authentication required to delete your account'});    // You must be logged in to delete your account
+        }
 
-module.exports= { fetchProfile, updateProfile, uploadProfilePhoto, updateProfileVisibility, viewAllProfilesForAdmin, listPublicProfiles };
+        const deleteUser= await User.findByIdAndDelete(userId);
+        if(!deleteUser){
+            return res.status(404).json({message: 'User not found'});
+        }
+
+        res.status(200).json({message: 'User deleted successfully'});
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+module.exports= { fetchProfile, updateProfile, uploadProfilePhoto, updateProfileVisibility, viewAllProfilesForAdmin, listPublicProfiles, deleteUser };
