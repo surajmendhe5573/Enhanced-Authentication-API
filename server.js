@@ -3,6 +3,7 @@ const app= express();
 require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
+const path= require('path');
 
 const port= process.env.PORT || 5000
 
@@ -20,6 +21,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/profile', require('./routes/profile'));
