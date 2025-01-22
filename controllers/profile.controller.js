@@ -65,5 +65,47 @@ const updateProfile = async (req, res) => {
     }
 };
 
+const uploadProfilePhoto = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
 
-module.exports= { fetchProfile, updateProfile };
+        const updates = {};
+
+        if (req.file) {
+            updates.photo = `/uploads/${req.file.filename}`;
+        }
+
+        if (req.body.photoUrl) {
+            updates.photo = req.body.photoUrl;
+        }
+
+        if (!updates.photo) {
+            return res.status(400).json({ message: 'No photo or URL provided' });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: updates },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({
+            message: 'Profile photo updated successfully.',
+            user: updatedUser,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'An error occurred.', error: error.message });
+    }
+};
+
+
+
+module.exports= { fetchProfile, updateProfile, uploadProfilePhoto };
