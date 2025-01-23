@@ -14,7 +14,7 @@ require('./config/googleAuth');
 
 // Use session for authentication
 app.use(session({
-    secret: process.env.SESSION_SECRET,  // Store session secret in .env
+    secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: true,
   }));
