@@ -12,7 +12,6 @@ app.use(express.json());
 require('./config/db');
 require('./config/googleAuth');
 
-// Use session for authentication
 app.use(session({
     secret: process.env.SESSION_SECRET, 
     resave: false,
