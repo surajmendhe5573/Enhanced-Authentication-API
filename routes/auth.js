@@ -19,14 +19,6 @@ router.get('/google/callback', passport.authenticate('google', {
     res.redirect('/api/auth/profile');
 });
 
-// // Profile Route
-// router.get('/profile', (req, res) => {
-//     if (!req.isAuthenticated()) {
-//         return res.redirect('/api/auth/google');
-//     }
-//     res.send(`<h1>Hello ${req.user.displayName}</h1><a href="/api/auth/logout">Logout</a>`);
-// });
-
 // Profile Route
 router.get('/profile', async (req, res) => {
   if (!req.isAuthenticated()) {

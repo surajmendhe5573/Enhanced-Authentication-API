@@ -1,29 +1,6 @@
-// const passport = require("passport");
-// const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// require('dotenv').config();
-
-// passport.use(new GoogleStrategy({
-//   clientID: process.env.GOOGLE_CLIENT_ID,
-//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//   callbackURL: 'http://localhost:5000/api/auth/google/callback',
-// }, (accessToken, refreshToken, profile, done) => {
-//   return done(null, profile);
-// }));
-
-// // Serialize and deserialize user
-// passport.serializeUser((user, done) => {
-//   done(null, user);
-// });
-
-// passport.deserializeUser((user, done) => {
-//   done(null, user);
-// });
-
-// module.exports = passport;
-
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../models/user.model"); // Import your User model
+const User = require("../models/user.model"); 
 require('dotenv').config();
 
 passport.use(new GoogleStrategy({
@@ -40,7 +17,7 @@ passport.use(new GoogleStrategy({
         name: profile.displayName,
         email: profile.emails[0].value,
         photo: profile.photos[0].value,
-        role: 'User', // Default role
+        role: 'User', 
         password: '', // No password since it's Google login
       });
       await user.save();
@@ -51,9 +28,8 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-// Serialize and deserialize user
 passport.serializeUser((user, done) => {
-  done(null, user.id); // Serialize by user ID
+  done(null, user.id); 
 });
 
 passport.deserializeUser(async (id, done) => {
